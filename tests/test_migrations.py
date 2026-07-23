@@ -3,13 +3,16 @@ import os
 import pathlib
 import sqlite3
 import subprocess
+import sys
 
 PROJECT_ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 
 def _run_alembic(args, env):
+    # Use sys.executable -m alembic (not the bare "alembic" command) so the
+    # tests work on any OS regardless of how the venv exposes console scripts.
     subprocess.run(
-        ["alembic", *args],
+        [sys.executable, "-m", "alembic", *args],
         cwd=PROJECT_ROOT,
         env=env,
         check=True,
